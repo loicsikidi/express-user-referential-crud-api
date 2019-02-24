@@ -1,0 +1,77 @@
+---
+- hosts: all
+  vars_files:
+    - vars/vars.yml
+    - vars/db.yml
+
+  pre_tasks:
+    - name: Add archive.ubuntu.com repository
+      become: yes
+      apt_repository:
+        repo: deb http://archive.ubuntu.com/ubuntu trusty universe
+        state: present
+    - name: Update apt cache if needed.
+      become: yes
+      apt: update_cache=yes cache_valid_time=3600
+
+  roles:
+    - name: geerlingguy.postgresql
+      become: yes
+  
+  tasks:
+  - name: Disable the firewall (since this is for local dev only).
+    become: yes
+    service: name=ufw state=stopped
+
+  - name: Install all dependences on host(s).
+    become: yes
+    apt: 
+      pkg: "{{ packages }}" 
+      state: present
+
+  - name: Install npm packages.
+    become: yes
+    npm: name={{ item }} state=present global=yes
+    with_items: "{{ npm_packages }}"
+
+  - name: Check nodejs version.
+    command: "node --version"
+    register: node_current_version
+    changed_when: false
+
+  - name: Print the value of node_current_version variable.
+    debug: msg="The variable is {{ node_current_version.stdout }}"
+
+  - name: Print the value of node_current_version after the replacing of 'v' caracter
+    debug: msg="The variable is {{ node_current_version.stdout  | regex_replace('v') }}"
+
+  - name: Upgrade NODE version if needed (target={{ node_version }}).
+    become: yes
+    command: n {{ node_version }}
+    when: (node_current_version.stdout | regex_replace('v')) != node_version
+
+  - name: Ensure Node.js app folder exists.
+    file: path={{ node_application_location }} state=directory
+
+  - name: Install app dependencies defined in package.json.
+    npm: path={{ node_application_location }}
+
+  # - name: Check list of running Node.js apps.
+  #   command: forever list
+  #   register: forever_list
+  #   changed_when: false
+
+  # - name: Start example Node.js app.
+  #   command: forever start -o out.log -e err.log app.js
+  #   args:
+  #     chdir: "{{ node_application_location }}"
+  #   environment:
+  #     NODE_ENV: "{{ node_env }}"
+  #     DB_HOST: "{{ mysql_host }}"
+  #     DB_NAME: "{{ mysql_database }}"
+  #     DB_USER: "{{ mysql_user }}"
+  #     DB_PORT: "{{ mysql_port }}"
+  #     DB_PASSWORD: "{{ mysql_password }}"
+  #     PORT: "{{ node_application_port }}"
+  #     SECRET_TOKEN: "{{ application_secret_key }}"
+  #   when: "forever_list.stdout.find(node_application_location + '/app.js') == -1"

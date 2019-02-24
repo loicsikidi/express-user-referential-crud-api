@@ -1,0 +1,13 @@
+---
+packages:
+  - npm
+  - nodejs-legacy
+npm_packages:
+  - forever
+  - n
+  - nodemon
+
+node_env: "development"
+node_version: 11.6.0
+node_application_port: 8080
+node_application_location: "/srv/server"

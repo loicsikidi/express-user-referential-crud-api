@@ -1,0 +1,246 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger User API
+  description: Description of a user referential API
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://petstore.swagger.io/api
+paths:
+  /users:
+    get:
+      description: |
+        Returns all users from the referential that the user has access to
+      operationId: findUsers
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to retrieve per page. Default is 5, maximum is 50.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 50
+            default: 5
+        - name: offset
+          in: query
+          description: Offset the list of returned results by this amount. Default is zero.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: get users response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsers'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: |
+        Creates a new users into the referential. Duplicates are not allowed
+      operationId: addUser
+      requestBody:
+        description: User to add to the referential
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: user created
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{username}:
+    get:
+      description: |
+        Returns user based on the username
+      operationId: findUser
+      parameters:
+        - name: username
+          in: path
+          description: ID of user to fetch
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: |
+        Updates a single user based on the ID supplied
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+            format: email
+      requestBody:
+        description: User to update in the referential
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          description: user updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: |
+        Deletes a single user based on the ID supplied
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '204':
+          description: user deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+components:
+  schemas:
+    GetUsers:
+      allOf:
+        - $ref: '#/components/schemas/GetCollectionBase'    
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+      
+    User:
+      allOf:
+        - $ref: '#/components/schemas/NewUser'
+        - required:
+          - created_at
+          - updated_at
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time  
+
+    NewUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseUser'
+      required:
+        - username
+        - status
+        - first_name
+        - last_name        
+      properties:
+        username:
+          type: "string"
+          format: "email"
+
+    UpdateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseUser'
+      required:
+        - status
+        - first_name
+        - last_name
+        - start_date
+        - end_date
+        - phone
+        
+    BaseUser:
+      properties:
+        first_name:
+          type: "string"
+        last_name:
+          type: "string"
+        phone:
+          type: "string"
+          nullable: true
+        start_date:
+          description: "date describing when the user starts working with the collective"
+          type: "string"
+          format: "date-time"
+          nullable: true
+        end_date:
+          description: "date describing when the user ends working with the collective"
+          type: "string"
+          format: "date-time"
+          nullable: true
+        status:
+          type: "string"
+          description: "user status in the collective"
+          enum:
+            - intern
+            - service_provider
+            - trainee
+            
+    GetCollectionBase:
+      required:
+        - offset
+        - limit
+      properties:
+        offset:
+          type: integer
+          format: int32
+        limit:
+          type: integer
+          format: int32
+          
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: "string"
+        message:
+          type: "string"
