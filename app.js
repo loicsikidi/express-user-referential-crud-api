@@ -39,13 +39,11 @@ app.use(function(req, res, next) {
 
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {;
-    res.status(err.status || 500);
+    res.status(err.statusCode || err.status || 500);
     res.json({
         name: err.name,
         message: err.message,
         data: err.data
-        // message: err.message,
-        // error: {}
     });
   });
 }
