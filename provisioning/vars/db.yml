@@ -4,6 +4,7 @@ postgresql_python_library: python3-psycopg2
 
 postgresql_databases:
   - name: suricats_db
+  - name: suricats_db_test
 postgresql_users:
   - name: suri_user
     password: superpassword

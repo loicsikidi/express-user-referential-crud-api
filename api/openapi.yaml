@@ -7,7 +7,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: http://petstore.swagger.io/api
+  - url: TBD
 paths:
   /users:
     get:
@@ -41,12 +41,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetUsers'
-        default:
-          description: unexpected error
+        '500':
+          description: Internal Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/InternalError'
     post:
       description: |
         Creates a new users into the referential. Duplicates are not allowed
@@ -61,12 +61,24 @@ paths:
       responses:
         '201':
           description: user created
-        default:
-          description: unexpected error
+        '400':
+          description: Bad Request please refer to the API documentation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BadRequest'
+        '409':
+          description: The user already exists in the referential
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conflict'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
   /users/{username}:
     get:
       description: |
@@ -87,12 +99,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        default:
-          description: unexpected error
+        '404':
+          description: The user doesn't exists
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
     put:
       description: |
         Updates a single user based on the ID supplied
@@ -119,12 +137,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        default:
-          description: unexpected error
+        '400':
+          description: Bad Request please refer to the API documentation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: The user doesn't exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
     delete:
       description: |
         Deletes a single user based on the ID supplied
@@ -140,12 +170,18 @@ paths:
       responses:
         '204':
           description: user deleted
-        default:
-          description: unexpected error
+        '404':
+          description: The user doesn't exists
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
                 
 components:
   schemas:
@@ -200,8 +236,12 @@ components:
       properties:
         first_name:
           type: "string"
+          minLength: 1
+          maxLength: 30
         last_name:
           type: "string"
+          minLength: 1
+          maxLength: 30
         phone:
           type: "string"
           nullable: true
@@ -234,6 +274,46 @@ components:
         limit:
           type: integer
           format: int32
+
+    BadRequest:
+      description: Bad Request
+      allOf:
+        - $ref: '#/components/schemas/Error'
+      properties:
+        code:
+          type: "string"
+          enum:
+            - bad_request
+ 
+    InternalError:
+      description: Internal Error
+      allOf:
+        - $ref: '#/components/schemas/Error'
+      properties:
+        code:
+          type: "string"
+          enum:
+            - internal_error
+            
+    Conflict:
+      description: The resource already exists
+      allOf:
+        - $ref: '#/components/schemas/Error'
+      properties:
+        code:
+          type: "string"
+          enum:
+            - conflict
+            
+    NotFound:
+      description: The resource not found
+      allOf:
+        - $ref: '#/components/schemas/Error'
+      properties:
+        code:
+          type: "string"
+          enum:
+            - not_found
           
     Error:
       required:

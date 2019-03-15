@@ -67,6 +67,7 @@ router.put('/:username', validator.validate("put", "/users/{username}"), functio
     }
     updatedUser = updatedUser[0];
     updatedUser.status = user.status;
+    //TODO: remove this part because of the code smell...
     delete updatedUser.id;
     delete updatedUser.status_id;
     res.status(200)
