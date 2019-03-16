@@ -10,6 +10,11 @@ const u = require('../../lib/utils');
 const validator = u.openApiValidator();
 const server = require('../../app');
 
+const resource = 'users';
+const nominalUsername = 'john.doe@suricats-consulting.com';
+const nominalFirstName = 'john';
+const nominalLastName = 'doe';
+
 describe('USERS API routes', function() {
 
     beforeEach(function(done) {
@@ -36,7 +41,7 @@ describe('USERS API routes', function() {
         it('expect to get all users', function(done) {
           const validateResponse = validator.validateResponse("get", "/users");
           chai.request(server)
-          .get('/api/v1/users')
+          .get(`/api/v1/${resource}`)
           .end(function(err, res) {
             expect(validateResponse(res)).to.be.undefined;  
             expect(res).to.have.status(200);
@@ -44,9 +49,9 @@ describe('USERS API routes', function() {
             expect(res.body.limit).to.equal(5);
             expect(res.body.offset).to.equal(0);
             expect(res.body.users.length).to.equal(2);
-            expect(res.body.users[0].username).to.equal('john.doe@suricats-consulting.com');
-            expect(res.body.users[0].first_name).to.equal('john');
-            expect(res.body.users[0].last_name).to.equal('doe');
+            expect(res.body.users[0].username).to.equal(nominalUsername);
+            expect(res.body.users[0].first_name).to.equal(nominalFirstName);
+            expect(res.body.users[0].last_name).to.equal(nominalLastName);
             expect(res.body.users[1].username).to.equal('jane.doe@suricats-consulting.com');
             expect(res.body.users[1].first_name).to.equal('jane');
             expect(res.body.users[1].last_name).to.equal('doe');
@@ -57,7 +62,7 @@ describe('USERS API routes', function() {
         it('expect to only get the first user thanks to limit filter', function(done) {
             const validateResponse = validator.validateResponse("get", "/users");
             chai.request(server)
-            .get('/api/v1/users')
+            .get(`/api/v1/${resource}`)
             .query({limit: 1})
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
@@ -66,9 +71,9 @@ describe('USERS API routes', function() {
               expect(res.body.limit).to.equal(1);
               expect(res.body.offset).to.equal(0);
               expect(res.body.users.length).to.equal(1);
-              expect(res.body.users[0].username).to.equal('john.doe@suricats-consulting.com');
-              expect(res.body.users[0].first_name).to.equal('john');
-              expect(res.body.users[0].last_name).to.equal('doe');
+              expect(res.body.users[0].username).to.equal(nominalUsername);
+              expect(res.body.users[0].first_name).to.equal(nominalFirstName);
+              expect(res.body.users[0].last_name).to.equal(nominalLastName);
               done();
             });
         });
@@ -76,7 +81,7 @@ describe('USERS API routes', function() {
         it('expect to only get the second user thanks to offset filter', function(done) {
             const validateResponse = validator.validateResponse("get", "/users");
             chai.request(server)
-            .get('/api/v1/users')
+            .get(`/api/v1/${resource}`)
             .query({offset: 1})
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
@@ -94,7 +99,7 @@ describe('USERS API routes', function() {
 
         it('expect to have a error because offset query param is not an integer', function(done) {
             chai.request(server)
-            .get('/api/v1/users')
+            .get(`/api/v1/${resource}`)
             .query({offset: 'foobar'})
             .end(function(err, res) {
               expect(res).to.have.status(400);
@@ -108,7 +113,7 @@ describe('USERS API routes', function() {
 
         it('expect to have a error because limit query param is not an integer', function(done) {
             chai.request(server)
-            .get('/api/v1/users')
+            .get(`/api/v1/${resource}`)
             .query({limit: 'foobar'})
             .end(function(err, res) {
               expect(res).to.have.status(400);
@@ -125,14 +130,14 @@ describe('USERS API routes', function() {
         it('expect to get a SINGLE user', function(done) {
           const validateResponse = validator.validateResponse("get", "/users/{username}");
           chai.request(server)
-          .get('/api/v1/users/john.doe@suricats-consulting.com')
+          .get(`/api/v1/${resource}/${nominalUsername}`)
           .end(function(err, res) {
             expect(validateResponse(res)).to.be.undefined;  
             expect(res).to.have.status(200);
             expect(res).to.be.json; // jshint ignore:line
-            expect(res.body.username).to.equal('john.doe@suricats-consulting.com');
-            expect(res.body.first_name).to.equal('john');
-            expect(res.body.last_name).to.equal('doe');
+            expect(res.body.username).to.equal(nominalUsername);
+            expect(res.body.first_name).to.equal(nominalFirstName);
+            expect(res.body.last_name).to.equal(nominalLastName);
             done();
           });
         });
@@ -140,7 +145,7 @@ describe('USERS API routes', function() {
         it('expect to have not_found (404) error', function(done) {
             const validateResponse = validator.validateResponse("get", "/users/{username}");
             chai.request(server)
-            .get('/api/v1/users/not.found@suricats-consulting.com')
+            .get(`/api/v1/${resource}/not.found@suricats-consulting.com`)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
               expect(res).to.have.status(404);
@@ -161,7 +166,7 @@ describe('USERS API routes', function() {
             status: ref.STATUS_INTERN_CODE
           };
           chai.request(server)
-          .post('/api/v1/users')
+          .post(`/api/v1/${resource}`)
           .send(newUser)
           .end(function(err, res) {
             expect(validateResponse(res)).to.be.undefined;  
@@ -180,14 +185,14 @@ describe('USERS API routes', function() {
               status: ref.STATUS_INTERN_CODE
             };
             chai.request(server)
-            .post('/api/v1/users')
+            .post(`/api/v1/${resource}`)
             .send(newUser)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
               expect(res).to.have.status(201);
               expect(res.headers).to.have.property('location');
               chai.request(server)
-              .post('/api/v1/users')
+              .post(`/api/v1/${resource}`)
               .send(newUser)
               .end(function(err2, res2) {
                 expect(validateResponse(res2)).to.be.undefined;
@@ -209,7 +214,7 @@ describe('USERS API routes', function() {
               status: 'WRONG_STATUS'
             };
             chai.request(server)
-            .post('/api/v1/users')
+            .post(`/api/v1/${resource}`)
             .send(newUser)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
@@ -225,23 +230,23 @@ describe('USERS API routes', function() {
         it('expect to update succefully a user', function(done) {
           const validateResponse = validator.validateResponse("put", "/users/{username}");
           const updateUser = {
-            first_name: 'john',
-            last_name: 'doe',
+            first_name: nominalFirstName,
+            last_name: nominalLastName,
             status: ref.STATUS_INTERN_CODE,
             start_date: null,
             end_date: null,
             phone: '0691923042'
           };
           chai.request(server)
-          .put('/api/v1/users/john.doe@suricats-consulting.com')
+          .put(`/api/v1/${resource}/${nominalUsername}`)
           .send(updateUser)
           .end(function(err, res) {
             expect(validateResponse(res)).to.be.undefined;  
             expect(res).to.have.status(200);
             expect(res).to.be.json; // jshint ignore:line
-            expect(res.body.username).to.equal('john.doe@suricats-consulting.com');
-            expect(res.body.first_name).to.equal('john');
-            expect(res.body.last_name).to.equal('doe');
+            expect(res.body.username).to.equal(nominalUsername);
+            expect(res.body.first_name).to.equal(nominalFirstName);
+            expect(res.body.last_name).to.equal(nominalLastName);
             done();
           });
         });
@@ -249,15 +254,15 @@ describe('USERS API routes', function() {
         it('expect to have a not_found (404) error', function(done) {
             const validateResponse = validator.validateResponse("put", "/users/{username}");
             const updateUser = {
-                first_name: 'john',
-                last_name: 'doe',
+                first_name: nominalFirstName,
+                last_name: nominalLastName,
                 status: ref.STATUS_INTERN_CODE,
                 start_date: null,
                 end_date: null,
                 phone: '0691923042'
             };
             chai.request(server)
-            .put('/api/v1/users/not.found@suricats-consulting.com')
+            .put(`/api/v1/${resource}/not.found@suricats-consulting.com`)
             .send(updateUser)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;
@@ -279,7 +284,7 @@ describe('USERS API routes', function() {
                 phone: null
             };
             chai.request(server)
-            .put('/api/v1/users/john.doe@suricats-consulting.com')
+            .put(`/api/v1/${resource}/${nominalUsername}`)
             .send(updateUser)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;
@@ -295,7 +300,7 @@ describe('USERS API routes', function() {
         it('expect to delete a SINGLE user', function(done) {
           const validateResponse = validator.validateResponse("delete", "/users/{username}");
           chai.request(server)
-          .delete('/api/v1/users/john.doe@suricats-consulting.com')
+          .delete(`/api/v1/${resource}/${nominalUsername}`)
           .end(function(err, res) {
             expect(validateResponse(res)).to.be.undefined;  
             expect(res).to.have.status(204);
@@ -306,7 +311,7 @@ describe('USERS API routes', function() {
         it('expect to have not_found (404) error', function(done) {
             const validateResponse = validator.validateResponse("delete", "/users/{username}");
             chai.request(server)
-            .delete('/api/v1/users/not.found@suricats-consulting.com')
+            .delete(`/api/v1/${resource}/not.found@suricats-consulting.com`)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
               expect(res).to.have.status(404);
