@@ -14,4 +14,16 @@ describe('referential.js library unit tests', () => {
             done();
         });
     });
+
+    describe('stucture', () => {
+        it('expect to get expected properties', (done) => {
+            expect(ref).to.be.a('object');
+            expect(ref).to.have.property('OPENAPI_DEFAULT_QUERY_PARAM');
+            expect(ref).to.have.property('STATUS_INTERN_CODE');
+            expect(ref).to.have.property('STATUS_TRAINEE_CODE');
+            expect(ref).to.have.property('STATUS_SERVICE_PROVIDER_CODE');
+            expect(ref).to.have.property('DB_ERRORS');
+            done();
+        });
+    });
 });

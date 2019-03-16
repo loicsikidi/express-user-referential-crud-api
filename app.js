@@ -1,11 +1,10 @@
-const dotenv = require('dotenv').config();
-
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const users = require('./routes/users');
 const ref = require('./lib/referential');
+const configuration = require('./lib/configuration');
 const { NotFoundError } = require('./lib/errors');
 
 //TODO: get rid of this implementation... get default value directly from the yaml
@@ -15,7 +14,7 @@ const setDefaultQueryParamValues = require('express-openapi-defaults')({
 
 const app = express();
 
-if (process.env.NODE_ENV !== 'development') {
+if (app.get('env') !== 'development') {
   app.use(logger('dev'));
 }
 app.use(bodyParser.json());
@@ -51,6 +50,6 @@ app.use(function(err, req, res, next) {
   res.json(response);
 });
 
-app.listen(process.env.PORT);
+app.listen(configuration.PORT);
 
 module.exports = app;
