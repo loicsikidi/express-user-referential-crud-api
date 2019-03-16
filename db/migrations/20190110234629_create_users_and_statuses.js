@@ -30,8 +30,8 @@ exports.up = (knex, Promise) => {
   
 exports.down = (knex, Promise) => {
   return knex.schema
-  .dropTable('statuses')
   .dropTable('users')
+  .dropTable('statuses')
   .then(() => {
     return knex.raw('drop extension if exists "uuid-ossp"')
   });

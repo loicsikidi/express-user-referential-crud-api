@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const users = require('./routes/users');
 const ref = require('./lib/referential');
+const { NotFoundError } = require('./lib/errors');
 
 //TODO: get rid of this implementation... get default value directly from the yaml
 const setDefaultQueryParamValues = require('express-openapi-defaults')({
@@ -30,33 +31,24 @@ app.use('/api/v1/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    const err = new Error('Not Found');
-    err.status = 404;
+    const err = new NotFoundError('Route does not exist');
     next(err);
 });
 
-// development error handler will print stacktrace
-
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {;
-    res.status(err.status || 500);
-    res.json({
-        name: err.name,
-        message: err.message,
-        data: err.data
-        // message: err.message,
-        // error: {}
-    });
-  });
-}
-
-// production error handler no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: {}
-  });
+  // handle the exception throws by express-openapi-validate module 
+  if(err.statusCode == 400){
+    err.name = "bad_request";
+  }
+  response = {
+    code: err.name,
+    message: err.message
+  }
+  if(app.get('env') !== "production"){
+    response.data = err.data
+  }
+  res.status(err.statusCode || err.status || 500);
+  res.json(response);
 });
 
 app.listen(process.env.PORT);

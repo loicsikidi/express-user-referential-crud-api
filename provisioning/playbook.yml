@@ -55,23 +55,3 @@
 
   - name: Install app dependencies defined in package.json.
     npm: path={{ node_application_location }}
-
-  # - name: Check list of running Node.js apps.
-  #   command: forever list
-  #   register: forever_list
-  #   changed_when: false
-
-  # - name: Start example Node.js app.
-  #   command: forever start -o out.log -e err.log app.js
-  #   args:
-  #     chdir: "{{ node_application_location }}"
-  #   environment:
-  #     NODE_ENV: "{{ node_env }}"
-  #     DB_HOST: "{{ mysql_host }}"
-  #     DB_NAME: "{{ mysql_database }}"
-  #     DB_USER: "{{ mysql_user }}"
-  #     DB_PORT: "{{ mysql_port }}"
-  #     DB_PASSWORD: "{{ mysql_password }}"
-  #     PORT: "{{ node_application_port }}"
-  #     SECRET_TOKEN: "{{ application_secret_key }}"
-  #   when: "forever_list.stdout.find(node_application_location + '/app.js') == -1"

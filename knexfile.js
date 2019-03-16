@@ -12,7 +12,7 @@ module.exports = {
     },
     test: {
       client: databaseClient,
-      connection: 'postgres://localhost:5432/suricats_db_test',
+      connection: { user:'suri_user', password:'superpassword', database:'suricats_db_test', host:'localhost'},
       migrations: {
         directory: __dirname + '/db/migrations'
       },

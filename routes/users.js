@@ -5,8 +5,8 @@ const u = require('../lib/utils');
 const ref = require('../lib/referential');
 const userController = require('../controllers/users');
 const statusController = require('../controllers/statuses');
-const { NotFoundException, DuplicateException } = require('../lib/errors');
-const databaseType = process.env.DATABASE_TYPE;ex
+const { NotFoundError, DuplicateError } = require('../lib/errors');
+const databaseType = process.env.DATABASE_TYPE;
 
 
 router.get('/', validator.validate("get", "/users"), function(req, res, next) {
@@ -36,7 +36,7 @@ router.post('/', validator.validate("post", "/users"), function(req, res, next) 
   })
   .catch((err) => {
     if(err.code && err.code === ref.DB_ERRORS[databaseType].DUPLICATE_KEY){
-      throw new DuplicateException('User already exists');
+      throw new DuplicateError('User already exists');
     }
     next(err); 
   })
@@ -47,7 +47,7 @@ router.get('/:username', validator.validate("get", "/users/{username}"), functio
   return userController.getUserByEmail(req.params.username)
   .then((user) => {
     if(!user){
-      throw new NotFoundException('User does not exist');
+      throw new NotFoundError('User does not exist');
     }
     res.send(user);
   })
@@ -63,10 +63,11 @@ router.put('/:username', validator.validate("put", "/users/{username}"), functio
   }) 
   .then((updatedUser) => {
     if(updatedUser.length === 0){
-      throw new NotFoundException('User does not exist');
+      throw new NotFoundError('User does not exist');
     }
     updatedUser = updatedUser[0];
     updatedUser.status = user.status;
+    //TODO: remove this part because of the code smell...
     delete updatedUser.id;
     delete updatedUser.status_id;
     res.status(200)
@@ -79,7 +80,7 @@ router.delete('/:username', validator.validate("delete", "/users/{username}"), f
   return userController.deleteUser(req.params.username)
   .then((response) => {
     if(response.length === 0){
-      throw new NotFoundException('User does not exist');
+      throw new NotFoundError('User does not exist');
     }
     res.status(204)
     .send();
