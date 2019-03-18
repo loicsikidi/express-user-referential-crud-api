@@ -7,17 +7,16 @@ services:
 addons:
   postgresql: '9.5'
 env:
-  matrix:
+  global:
   - NODE_ENV: test
   - PORT: 8080
   - DATABASE_TYPE: postgresql
   - DATABASE_NAME: suricats_db_test
   - DATABASE_HOSTNAME: localhost
-  global:
-  - secure: i15F3LGtN61Blz93RUyM+SfOO0QoyQZk4wqvQoRMW5E6b80fiaTuDA+jkBJTGer6Awh6HK4XoT46eKDZIYzssl2xkU3U0M6VCdjiPALWsx/ejE4rVtIOtwVl9RfOeM2a2GIZBtXgRA+qV9DuPZVxCHSY9rELzdVjWiAOU2Vxvuq1VKFbTkRNtYbTAelclV5JCA5hwviGemWzk9gE2G1tBt73ZEtBWENxxodznD0ZdE+ETwYt93ia/9vDDPCuMIxfSsTE4PmQV5vPzwVwsOdugTpcoHNLhlcJgBFVY1NrJ77H9qc5bW1Z9JLvq3tKbneZQrYrqWgQtGdWyiKSn6rKGOUfFoL1YOP4HXhDxQqs6B1eEOh6GDSOdX1dbqeDffgDB9BQIBo7CigU1SUeleHKBiLl1ctoQ3xdTf3hpoJaomrDer8Km/HeoCYwgmwuhwf8Qjeq/YNXGYG2CHlCkrQn5RGSIRhJVwb9eVvUmkOsUTNYiK5tWDtSbQLTPWQcqcGzw69BW8Aya7TvYmaGyMkJLnVxOapOGMUxAw6mwnXJ1pc5s69+t8cgSi4ibvTq7tpB4XSMnZPczuypo7zl59BC+vF3zCHPPHyTIz2riKX3eipfiCKeKQSuPW1ulpXH/+QLOPD3tuIXjDK23hum+t/xOLcL5AOc80g72xHokLiJBtY=
-  - secure: if+NcJKTcaNH7brx8MvYkgih5C1k91xjR3r5WBCZyvx1vXQnBFNXeWLDT1qVO1Z+o4kgrOCuQdx8dvaMWaXBsZb8PjejnAnY+x4uTcMw0DJyn7FRp4jbpo0Xt624ZJF5ddzy/IdRVdxRstnP901DFLw1vA9/BcEpbcfZmeXI15NsPMs3d928yCMatiORd7735zIsxj6Msdt+QWr9I7e5C0ebNtWoMpuqGc1QzcrfUwOzPfJ5JCM8ZxHVLYVT8bfznANCUuVuBjPt8VVGUEAgeEfZA2wbtTDBO8IZJTUA1qpqYTu+a6LFOXh1NLA+n+wsPj5Dl+/Lh/w4zqJE1I6Z+QciEJbLjYuOjGEislYekm+yEeFCW8EdSGP1SJOxysxRApudpm60KTtZG8JjUfXRqYSu9hOapnrV8yDXXQNwz/yTbhwm1Wkro28PYbtcFYmd19hmkm5UdrzEGSec7cgNhN7OUFNADhPwKIBXHYAhVEwpr6N0yuDFup/V+iSD4GtRVp3BixXSJWOJ+eTTS8Q/+qb78HVYPM2fCu/dAlbC8mmKvtRpWMs+bFiftAB4bbkOhZyquE0Rhru+6tVOaB0rKhYnRk88hBPz10cE4qHsLSBbqDTdahuZWPoxgrXkDsGFdcMRuYPiCxZyw7iVWa5gngKH5HyX+Af4XDD7Ioo37Hg=
+  - DATABASE_USERNAME: suri_user
+  - secure: THIPLDGJJ/u2G0cdtSrsKyMhwT2iz5BGwJcF8SDG5Em2CIZg8+r/20D7nvcQg1yeW5UoKLNR/FeKTA/2/8ec5U0zewdSZyHCuLSEciRjREgl+pOosuhCltiQ4fXs9Gr+BvLPT4wuopehWTymeDQIHYjnlze7t+XXcXlAXlSsZb/0kjkmI+OWVasb0bX46FYBBy5H8LtDoi9+egjbk8xGKFzloChlvUJZKPPaPbw2ZxK8ro2atTaFoC40RfA/p0IwJllAGFW5uc00gl40AdJksKdsiLzz2Jh/+qKc6jJGjyrAYxz5y/b1grS8L41h9bqKNZTgBQbMBFgQSaQr18PjHbWx4yERu3rxQlgizmTzRSESLrTfEZRLdeF/ml8mS8NwqeKFp7TWtICPvcE+KADwBFCQD1KrDn9Xwwo6YKaHMa2zWBelAEESCLryrgKbxs9r9NFxUNa7oTlPSAkd/z50fEw9QpEdDorJldOHow0OnDBcAi5ogy44s/vmJPRMD0Nxnr7FIDvh8VuFleg18BLc6TlU8ldllliOQaa9az6/wAIFs/D69rqsj0ivVOpK1yeixU45HlueBKTKk4e6ePou7YUuKF6d0q4Mf8M0RBrk2l5nAfpH9HWGXC/utDWgKMp4g9/jV4B6+2/yTTahx90WkoecECxgp77l6eDHfQG5uxY=
 before_script:
 - psql -U postgres -c "create database ${DATABASE_NAME}"
-- psql -U postgres -c "create user ${DATABASE_USER} with password '${DATABASE_PASSWORD}'"
-- psql -U postgres -c "alter user ${DATABASE_USER} with superuser"
+- psql -U postgres -c "create user ${DATABASE_USERNAME} with password '${DATABASE_PASSWORD}'"
+- psql -U postgres -c "alter user ${DATABASE_USERNAME} with superuser"
 after_success: npm run coverage
