@@ -6,7 +6,7 @@ const ref = require('../lib/referential');
 const userController = require('../controllers/users');
 const statusController = require('../controllers/statuses');
 const { NotFoundError, DuplicateError } = require('../lib/errors');
-const databaseType = process.env.DATABASE_TYPE;
+const databaseType = require('../lib/configuration').DATABASE_TYPE;
 
 
 router.get('/', validator.validate("get", "/users"), function(req, res, next) {

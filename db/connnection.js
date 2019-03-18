@@ -1,4 +1,4 @@
-const environment = process.env.NODE_ENV;
+const environment = require('../lib/configuration').ENV;
 const path = require('path');
 const BASE_PATH = path.resolve(".");
 
