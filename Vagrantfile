@@ -18,6 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      app.vm.hostname = "suricats-api.local.com"
      app.vm.network :private_network, ip: "192.168.60.8"
      app.vm.network "forwarded_port", guest: 8080, host: 9080
+     app.vm.network "forwarded_port", guest: 9229, host: 9229
   end
 
   # Ansible provisioner.

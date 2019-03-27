@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const validator = require('../lib/utils').openApiValidator();
 const u = require('../lib/utils');
 const ref = require('../lib/referential');

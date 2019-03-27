@@ -28,11 +28,11 @@ In order to facilitate the installation of this project on our local machine. Th
 
 ## Prerequisites
 
-* install vagrant
-* install ansible
-* install virtualbox
+* install virtualbox ([download page](https://www.virtualbox.org/wiki/Downloads))
+* install vagrant ([download page](https://www.vagrantup.com/downloads.html))
+* install ansible ([documentation page](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html))
 
-## Actions
+## List of the actions
 
 1. Go to the source root arborescence of the project
 
@@ -56,23 +56,36 @@ vagrant ssh
 cd /srv/server 
 ```
 
-5. Initiate the value on the database (TODO: ansible)
+5. Initiate the value on the database (development purpose)
 
 ```cmd
-./node_modules/.bin/knex migrate:latest --env  development
-
-./node_modules/.bin/knex seed:run --env  development
+npm run dev:init_db
 ```
 
 6. Run the project (development purpose)
 
 ```cmd
-./node_modules/.bin/nodemon app.js -L
+npm run watch:server
 ```
 
-Operation perform in this context:
-* macOs
+Project run in this context:
+* macOs      mojave (10.14.3)
 * python     3.7.0
 * ansible    2.7.5
 * vagrant    2.2.3
 * virtualbox 6.0.0
+
+# Technical considerations
+
+## Environment variables
+
+Name               | Description
+------------------ | -----------
+PORT               | Port listen by the server (default set to *8080*)
+DATABASE_TYPE      | The project uses an ORM so we need to define the database's type (default set to *postgresql*)
+DATABASE_NAME      | Database's name
+DATABASE_USERNAME  | Username used to connect to the database
+DATABASE_PASSWORD  | Password of the latter
+DATABASE_HOSTNAME  | Database's host (default set to *localhost*)
+
+Default values are defined in */lib/configuration.js*

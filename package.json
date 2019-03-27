@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "suricats homemade API",
   "main": "app.js",
+  "engines": {
+    "node": "10.15.3"
+  },
   "scripts": {
+    "start": "node app.js",
     "test": "./node_modules/.bin/c8 ./node_modules/.bin/mocha ./test/**/*.test.js --exit",
-    "coverage": "./node_modules/.bin/c8 report  --reporter=text-lcov | ./node_modules/.bin/coveralls"
+    "coverage": "./node_modules/.bin/c8 report  --reporter=text-lcov | ./node_modules/.bin/coveralls",
+    "dev:init_db": "./node_modules/.bin/knex migrate:latest --env development && ./node_modules/.bin/knex seed:run --env development",
+    "dev:debug": "node --inspect app.js",
+    "watch:server": "nodemon app.js -L"
   },
   "keywords": [
     "api"
@@ -14,19 +21,18 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "bunyan": "^1.8.12",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-openapi-defaults": "^0.5.1",
     "express-openapi-validate": "^0.4.4",
     "express-request-id": "^1.4.1",
-    "js-yaml": "^3.12.1",
+    "js-yaml": "^3.13.0",
     "knex": "^0.16.3",
+    "pg": "^7.7.1",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
-    "npm": "^6.5.0",
-    "path": "^0.12.7",
-    "pg": "^7.7.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -35,8 +41,7 @@
     "chai-http": "^4.2.1",
     "coveralls": "^3.0.3",
     "faker": "^4.1.0",
-    "mocha": "^6.0.2",
-    "nodemon": "^1.18.10"
+    "mocha": "^6.0.2"
   },
   "mocha": {
     "timeout": 10000
