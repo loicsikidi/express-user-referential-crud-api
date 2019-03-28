@@ -9,11 +9,6 @@ module.exports = {
       },
       seeds: {
         directory: __dirname + '/db/seeds'
-      },
-      log: {
-        error(message){
-          console.error('AZERTY');
-        }
       }
     },
     test: {
