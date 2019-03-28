@@ -4,9 +4,9 @@ const addRequestId = require('express-request-id')();
 
 const users = require('./routes/users');
 const ref = require('./lib/referential');
-const {isSuccessStatusCode} = require('./lib/utils');
+const { isSuccessStatusCode, getCleanErr } = require('./lib/utils');
 const configuration = require('./lib/configuration');
-const logger = require('./logger');
+const logger = require('./lib/logger');
 const { NotFoundError } = require('./lib/errors');
 
 //TODO: get rid of this implementation... get default value directly from the yaml
@@ -14,28 +14,37 @@ const setDefaultQueryParamValues = require('express-openapi-defaults')({
   parameters: ref.OPENAPI_DEFAULT_QUERY_PARAM.toArray()
 });
 
+// Initialize the logging instance
+function preLoggingMiddleware(req, res, next){
+  req.logger = logger.loggerInstance(req.id);
+  req.logger.info({req: req}, 'request');
+  req.logger.info({action: logger.getAction(req), category: "endpoint"}, 'start of the process');
+  next();
+}
+
+function postLoggingMiddleware(req, res, next){
+  function afterResponse() {
+    res.removeListener('finish', afterResponse);
+    res.removeListener('close', afterResponse);
+    const logMessage = {
+      res:res,
+      action: logger.getAction(req),
+      eventType: isSuccessStatusCode(res) ? 'success' : 'failed',
+      category: "endpoint"
+    }
+    req.logger.info(logMessage, 'response');
+  }
+  res.on('finish', afterResponse);
+  res.on('close', afterResponse);
+  next();
+}
+
 app.use(bodyParser.json());
 app.use(setDefaultQueryParamValues);
 app.use(addRequestId);
 
 app.use(preLoggingMiddleware);
-
-app.use((req, res, next) => {
-  function afterResponse() {
-      res.removeListener('finish', afterResponse);
-      res.removeListener('close', afterResponse);
-      const logMessage = {
-        res:res,
-        action: logger.getAction(req),
-        eventType: isSuccessStatusCode(res) ? 'success' : 'failed',
-        category: "endpoint"
-      }
-      req.logger.info(logMessage, 'response');
-  }
-  res.on('finish', afterResponse);
-  res.on('close', afterResponse);
-  next();
-});
+app.use(postLoggingMiddleware);
 
 app.use('/api/v1/users', users);
 
@@ -53,6 +62,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   req.logger.error({err, err}, 'error catched in error middleware');
+  err = getCleanErr(err);
   // handle the exception throws by express-openapi-validate module 
   if(err.statusCode == 400){
     err.name = "bad_request";
@@ -69,12 +79,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(configuration.PORT);
-
-function preLoggingMiddleware(req, res, next){
-  req.logger = logger.loggerInstance(req.id);
-  req.logger.info({req: req}, 'request');
-  req.logger.info({action: logger.getAction(req), category: "endpoint"}, 'start of the process');
-  next();
-}
 
 module.exports = app;

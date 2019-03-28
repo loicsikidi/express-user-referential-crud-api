@@ -1,19 +1,24 @@
-const configuration = require("./lib/configuration");
+const {DATABASE_TYPE, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_HOSTNAME} = require("./lib/configuration");
 
 module.exports = {
     development: {
-      client: configuration.DATABASE_TYPE,
-      connection: { user:configuration.DATABASE_USERNAME, password:configuration.DATABASE_PASSWORD, database:configuration.DATABASE_NAME, host:configuration.DATABASE_HOSTNAME},
+      client: DATABASE_TYPE,
+      connection: { user:DATABASE_USERNAME, password:DATABASE_PASSWORD, database:DATABASE_NAME, host:DATABASE_HOSTNAME},
       migrations: {
         directory: __dirname + '/db/migrations'
       },
       seeds: {
         directory: __dirname + '/db/seeds'
+      },
+      log: {
+        error(message){
+          console.error('AZERTY');
+        }
       }
     },
     test: {
-      client: configuration.DATABASE_TYPE,
-      connection: { user:configuration.DATABASE_USERNAME, password:configuration.DATABASE_PASSWORD, database:configuration.DATABASE_NAME, host:configuration.DATABASE_HOSTNAME},
+      client: DATABASE_TYPE,
+      connection: { user:DATABASE_USERNAME, password:DATABASE_PASSWORD, database:DATABASE_NAME, host:DATABASE_HOSTNAME},
       migrations: {
         directory: __dirname + '/db/migrations'
       },
@@ -22,8 +27,8 @@ module.exports = {
       }
     },
     production: {
-      client: configuration.DATABASE_TYPE,
-      connection: { user:configuration.DATABASE_USERNAME, password:configuration.DATABASE_PASSWORD, database:configuration.DATABASE_NAME, host:configuration.DATABASE_HOSTNAME},
+      client: DATABASE_TYPE,
+      connection: { user:DATABASE_USERNAME, password:DATABASE_PASSWORD, database:DATABASE_NAME, host:DATABASE_HOSTNAME},
       migrations: {
         directory: __dirname + '/db/migrations'
       },
