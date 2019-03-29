@@ -1,12 +1,11 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const validator = require('../lib/utils').openApiValidator();
 const u = require('../lib/utils');
 const ref = require('../lib/referential');
 const userController = require('../controllers/users');
 const statusController = require('../controllers/statuses');
 const { NotFoundError, DuplicateError } = require('../lib/errors');
-const databaseType = require('../lib/configuration').DATABASE_TYPE;
+const { DATABASE_TYPE } = require('../lib/configuration');
 
 
 router.get('/', validator.validate("get", "/users"), function(req, res, next) {
@@ -35,7 +34,7 @@ router.post('/', validator.validate("post", "/users"), function(req, res, next) 
     .send();
   })
   .catch((err) => {
-    if(err.code && err.code === ref.DB_ERRORS[databaseType].DUPLICATE_KEY){
+    if(err.code && err.code === ref.DB_ERRORS[DATABASE_TYPE].DUPLICATE_KEY){
       throw new DuplicateError('User already exists');
     }
     next(err); 

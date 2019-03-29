@@ -90,3 +90,6 @@ typings/
 
 # Ansible retry files
 *.retry
+
+# Todo files
+TODO*

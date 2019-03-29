@@ -1,6 +1,6 @@
 const knex = require('../db/connnection');
 const moment = require('moment');
-const ref = require('../lib/referential');
+const { OPENAPI_DEFAULT_QUERY_PARAM } = require('../lib/referential');
 const u = require('../lib/utils');
 
 const getUserScope = ['username', 'first_name', 'last_name', 'start_date', 'end_date', 'updated_at', 'created_at', 'phone', {status: 'title'}];
@@ -9,7 +9,7 @@ const postUserScope = ['id', 'username', 'first_name', 'last_name', 'start_date'
 const putUserScope = ['first_name', 'last_name', 'start_date', 'end_date', 'updated_at', 'phone', 'status_id'];
 
 
-function getAllUsers(limit = ref.OPENAPI_DEFAULT_QUERY_PARAM.getParam('limit'), offset = ref.OPENAPI_DEFAULT_QUERY_PARAM.getParam('offset')) {
+function getAllUsers(limit = OPENAPI_DEFAULT_QUERY_PARAM.getParam('limit'), offset = OPENAPI_DEFAULT_QUERY_PARAM.getParam('offset')) {
   if(!Number.isInteger(limit) || !Number.isInteger(offset)){
     throw new Error('limit or/and offset parameters are not interger');
   }

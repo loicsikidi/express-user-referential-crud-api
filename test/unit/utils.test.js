@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'test';
 
 const u = require('../../lib/utils');
-const { InternalError } = require("../../lib/errors");
+const { InternalError, NotFoundError } = require("../../lib/errors");
 const { OpenApiValidator } = require("express-openapi-validate");
 const chai = require('chai');
 const expect = chai.expect;
@@ -124,8 +124,43 @@ describe('utils.js library unit tests', () => {
     });
 
     describe('openApiValidator', () => {
-        it('expect to have a instance OpenApiValidator class', (done) => {
+        it('expect to have an instance OpenApiValidator class', (done) => {
             expect(u.openApiValidator()).to.be.an.instanceof(OpenApiValidator);
+            done();
+        });
+    });
+
+    describe('isSuccessStatusCode', () => {
+        it('expect to return TRUE', (done) => {
+            const res = {statusCode : 200};
+            expect(u.isSuccessStatusCode(res)).to.be.true;
+            done();
+        });
+        it('expect to return FALSE', (done) => {
+            const res = {statusCode : 300};
+            expect(u.isSuccessStatusCode(res)).to.be.false;
+            done();
+        });
+    });
+
+    describe('getCleanErr', () => {
+        it('expect to have the behavor when the err doesn\'t need to be alterate', (done) => {
+            const err = new NotFoundError('fake error');
+            const newErr = u.getCleanErr(err);
+            expect(newErr).to.have.property('status', 404);
+            expect(newErr).to.have.property('name', 'not_found');
+            expect(newErr).to.have.property('message', 'fake error');
+            done();
+        });
+
+        it('expect to have the behavor when the err needs to be alterate (error thrown by knex)', (done) => {
+            const errMsg = 'foo bar knex bar foo';
+            const err = new NotFoundError('fake error');
+            err.stack = errMsg;
+            const newErr = u.getCleanErr(err);
+            expect(newErr).to.have.property('status', 404);
+            expect(newErr).to.have.property('name', 'internal_error');
+            expect(newErr).to.have.property('message','An error occurs in the database');
             done();
         });
     });
