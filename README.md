@@ -56,10 +56,10 @@ vagrant ssh
 cd /srv/server 
 ```
 
-5. Initiate the value on the database (development purpose)
+5. Set test values in the database  (development purpose)
 
 ```cmd
-npm run dev:init_db
+npm run hydrate
 ```
 
 6. Run the project (development purpose)
@@ -88,4 +88,4 @@ DATABASE_USERNAME  | Username used to connect to the database
 DATABASE_PASSWORD  | Password of the latter
 DATABASE_HOSTNAME  | Database's host (default set to *localhost*)
 
-Default values are defined in */lib/configuration.js*
+Default values are defined in *lib/configuration.js*
