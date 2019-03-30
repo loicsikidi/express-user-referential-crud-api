@@ -9,5 +9,10 @@ npm_packages:
 
 node_env: "development"
 node_version: 10.15.3
-node_application_port: 8080
 node_application_location: "/srv/server"
+node_application_port: 8080
+node_application_db_type: "postgresql"
+node_application_db_name: "suricats_db"
+node_application_db_username: "suri_user"
+node_application_db_password: "superpassword"
+node_application_db_hostname: "localhost"

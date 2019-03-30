@@ -55,3 +55,11 @@
 
   - name: Install app dependencies defined in package.json.
     npm: path={{ node_application_location }}
+
+  - name: Add .env in the project's root folder 
+    template:
+      src: "templates/local.dotenv.j2"
+      dest: "{{ node_application_location }}/.env"
+      owner: ubuntu
+      group: ubuntu
+      mode: 0644
