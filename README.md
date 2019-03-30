@@ -22,17 +22,56 @@ The goal of this project is to provide a simple user referential API.
 * ORM software (knex js)
 * & much more
 
-# Installation
+# Technical considerations
+
+## Environment variables
+
+Name               | Description
+------------------ | -----------
+PORT               | Port listen by the server (default set to *8080*)
+DATABASE_TYPE      | The project uses an ORM so we need to define the database's type (default set to *postgresql*)
+DATABASE_NAME      | Database's name
+DATABASE_USERNAME  | Username used to connect to the database
+DATABASE_PASSWORD  | Password of the latter
+DATABASE_HOSTNAME  | Database's host (default set to *localhost*)
+
+Default values are defined in *lib/configuration.js*
+
+
+## Run docker image of the project
+
+1. import the image locally
+
+```cmd
+docker pull lsikidi/express-user-referential-crud-api
+```
+
+2. run the image
+
+```cmd
+docker run \
+-p <forwarded_port>:8080 \
+-d \
+-e "NODE_ENV=production" \
+-e "DATABASE_TYPE=<db_type>" \
+-e "DATABASE_NAME=<db_name>" \
+-e "DATABASE_USERNAME=<db_username>" \
+-e "DATABASE_PASSWORD=<db_password>" \
+-e "DATABASE_HOSTNAME=<hostname>" \
+lsikidi/express-user-referential-crud-api
+```
+
+## Install the project locally
 
 In order to facilitate the installation of this project on our local machine. The project provide a *vagrantfile* to automatically provision the virtual machine with all the dependencies needed by the latter.
 
-## Prerequisites
+### Prerequisites
 
 * install virtualbox ([download page](https://www.virtualbox.org/wiki/Downloads))
 * install vagrant ([download page](https://www.vagrantup.com/downloads.html))
 * install ansible ([documentation page](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html))
 
-## List of the actions
+### List of the actions
 
 1. Go to the source root arborescence of the project
 
@@ -56,16 +95,24 @@ vagrant ssh
 cd /srv/server 
 ```
 
-5. Set test values in the database  (development purpose)
+5. Hydrate the database with test values
 
 ```cmd
 npm run hydrate
 ```
 
-6. Run the project (development purpose)
+6. Run the project
+
+Remark : the server will listen the port 9080 on your host machine (cf. vagrantfile line: 21).
 
 ```cmd
-npm run watch:server
+npm run
+```
+
+OR
+
+```cmd
+npm run watch:server #usefull if you need to dev
 ```
 
 Project run in this context:
@@ -74,18 +121,3 @@ Project run in this context:
 * ansible    2.7.5
 * vagrant    2.2.3
 * virtualbox 6.0.0
-
-# Technical considerations
-
-## Environment variables
-
-Name               | Description
------------------- | -----------
-PORT               | Port listen by the server (default set to *8080*)
-DATABASE_TYPE      | The project uses an ORM so we need to define the database's type (default set to *postgresql*)
-DATABASE_NAME      | Database's name
-DATABASE_USERNAME  | Username used to connect to the database
-DATABASE_PASSWORD  | Password of the latter
-DATABASE_HOSTNAME  | Database's host (default set to *localhost*)
-
-Default values are defined in *lib/configuration.js*
