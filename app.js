@@ -5,7 +5,7 @@ const addRequestId = require('express-request-id')();
 const users = require('./routes/users');
 const ref = require('./lib/referential');
 const { isSuccessStatusCode, getCleanErr } = require('./lib/utils');
-const configuration = require('./lib/configuration');
+const { PORT } = require('./lib/configuration');
 const logger = require('./lib/logger');
 const { NotFoundError } = require('./lib/errors');
 
@@ -78,6 +78,6 @@ app.use((err, req, res, next) => {
   res.json(response);
 });
 
-app.listen(configuration.PORT);
+const server = app.listen(PORT);
 
-module.exports = app;
+module.exports = server;

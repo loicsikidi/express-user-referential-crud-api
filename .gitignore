@@ -91,5 +91,8 @@ typings/
 # Ansible retry files
 *.retry
 
+# GCP app engine cookbook
+app.yaml
+
 # Todo files
 TODO*
