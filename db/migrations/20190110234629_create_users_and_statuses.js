@@ -1,5 +1,3 @@
-const u = require('../../lib/utils');
-
 exports.up = (knex, Promise) => {
     return knex.raw('create extension if not exists "uuid-ossp"')
     .then(() => {
@@ -21,9 +19,6 @@ exports.up = (knex, Promise) => {
         table.uuid('status_id').unsigned().notNullable();
         table.foreign('status_id').references('statuses.id');
         table.string('phone');
-        /** ATTRIBUTS A AJOUTER DANS UN FUTUR PROCHE :) **/
-        // table.string('password').notNullable();
-        // table.boolean('admin').notNullable().defaultTo(false);
       })
     })
 };

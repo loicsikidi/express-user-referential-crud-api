@@ -7,6 +7,7 @@
     "node": "10.15.3"
   },
   "scripts": {
+    "prestart": "./node_modules/.bin/knex migrate:latest && ./node_modules/.bin/knex seed:run",
     "start": "node app.js",
     "test": "./node_modules/.bin/c8 ./node_modules/.bin/mocha ./test/**/*.test.js --exit",
     "coverage": "./node_modules/.bin/c8 report  --reporter=text-lcov | ./node_modules/.bin/coveralls",
@@ -48,6 +49,9 @@
   "c8": {
     "include": [
       "**/*.js"
+    ],
+    "exclude": [
+      "db/seeds/*.js"
     ],
     "reporter": [
       "html",
