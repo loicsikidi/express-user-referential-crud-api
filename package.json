@@ -21,27 +21,27 @@
   "author": "Loïc Sikidi",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "bunyan": "^1.8.12",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-openapi-defaults": "^0.5.1",
     "express-openapi-validate": "^0.4.4",
     "express-request-id": "^1.4.1",
-    "js-yaml": "^3.13.0",
-    "knex": "^0.16.3",
-    "pg": "^7.7.1",
+    "js-yaml": "^3.13.1",
+    "knex": "^0.16.5",
     "md5": "^2.2.1",
     "moment": "^2.24.0",
+    "pg": "^7.10.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "c8": "^3.4.0",
+    "c8": "^3.5.0",
     "chai": "^4.2.0",
-    "chai-http": "^4.2.1",
+    "chai-http": "^4.3.0",
     "coveralls": "^3.0.3",
     "faker": "^4.1.0",
-    "mocha": "^6.0.2"
+    "mocha": "^6.1.4"
   },
   "mocha": {
     "timeout": 10000
