@@ -2,12 +2,18 @@ dist: xenial
 language: node_js
 node_js:
   - 10.15.3
-cache: npm
+cache: 
+  - npm
+  directories:
+    - '$HOME/.sonar/cache'
 notifications:
   email:
     on_failure: always
 addons:
   postgresql: '9.5'
+  sonarcloud:
+    organization: "loicsikidi-github"
+    token: $SONAR_TOKEN
 env:
   global:
     - NODE_ENV: test
@@ -27,4 +33,5 @@ script:
   # due to prestart (hydrate the database)
   - sleep 10
   - npm run perf:test
+  - sonar-scanner
 after_success: npm run coverage
