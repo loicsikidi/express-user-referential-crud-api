@@ -1,22 +1,30 @@
 dist: xenial
 language: node_js
 node_js:
-- 10.15.3
-services:
-- postgresql
+  - 10.15.3
+cache: npm
+notifications:
+  email:
+    on_failure: always
 addons:
   postgresql: '9.5'
 env:
   global:
-  - NODE_ENV: test
-  - PORT: 8080
-  - DATABASE_TYPE: postgresql
-  - DATABASE_NAME: suricats_db_test
-  - DATABASE_HOSTNAME: localhost
-  - DATABASE_USERNAME: suri_user
-  - secure: THIPLDGJJ/u2G0cdtSrsKyMhwT2iz5BGwJcF8SDG5Em2CIZg8+r/20D7nvcQg1yeW5UoKLNR/FeKTA/2/8ec5U0zewdSZyHCuLSEciRjREgl+pOosuhCltiQ4fXs9Gr+BvLPT4wuopehWTymeDQIHYjnlze7t+XXcXlAXlSsZb/0kjkmI+OWVasb0bX46FYBBy5H8LtDoi9+egjbk8xGKFzloChlvUJZKPPaPbw2ZxK8ro2atTaFoC40RfA/p0IwJllAGFW5uc00gl40AdJksKdsiLzz2Jh/+qKc6jJGjyrAYxz5y/b1grS8L41h9bqKNZTgBQbMBFgQSaQr18PjHbWx4yERu3rxQlgizmTzRSESLrTfEZRLdeF/ml8mS8NwqeKFp7TWtICPvcE+KADwBFCQD1KrDn9Xwwo6YKaHMa2zWBelAEESCLryrgKbxs9r9NFxUNa7oTlPSAkd/z50fEw9QpEdDorJldOHow0OnDBcAi5ogy44s/vmJPRMD0Nxnr7FIDvh8VuFleg18BLc6TlU8ldllliOQaa9az6/wAIFs/D69rqsj0ivVOpK1yeixU45HlueBKTKk4e6ePou7YUuKF6d0q4Mf8M0RBrk2l5nAfpH9HWGXC/utDWgKMp4g9/jV4B6+2/yTTahx90WkoecECxgp77l6eDHfQG5uxY=
+    - NODE_ENV: test
+    - PORT: 8080
+    - DATABASE_TYPE: postgresql
+    - DATABASE_NAME: suricats_db_test
+    - DATABASE_HOSTNAME: localhost
+    - DATABASE_USERNAME: suri_user
+    - secure: THIPLDGJJ/u2G0cdtSrsKyMhwT2iz5BGwJcF8SDG5Em2CIZg8+r/20D7nvcQg1yeW5UoKLNR/FeKTA/2/8ec5U0zewdSZyHCuLSEciRjREgl+pOosuhCltiQ4fXs9Gr+BvLPT4wuopehWTymeDQIHYjnlze7t+XXcXlAXlSsZb/0kjkmI+OWVasb0bX46FYBBy5H8LtDoi9+egjbk8xGKFzloChlvUJZKPPaPbw2ZxK8ro2atTaFoC40RfA/p0IwJllAGFW5uc00gl40AdJksKdsiLzz2Jh/+qKc6jJGjyrAYxz5y/b1grS8L41h9bqKNZTgBQbMBFgQSaQr18PjHbWx4yERu3rxQlgizmTzRSESLrTfEZRLdeF/ml8mS8NwqeKFp7TWtICPvcE+KADwBFCQD1KrDn9Xwwo6YKaHMa2zWBelAEESCLryrgKbxs9r9NFxUNa7oTlPSAkd/z50fEw9QpEdDorJldOHow0OnDBcAi5ogy44s/vmJPRMD0Nxnr7FIDvh8VuFleg18BLc6TlU8ldllliOQaa9az6/wAIFs/D69rqsj0ivVOpK1yeixU45HlueBKTKk4e6ePou7YUuKF6d0q4Mf8M0RBrk2l5nAfpH9HWGXC/utDWgKMp4g9/jV4B6+2/yTTahx90WkoecECxgp77l6eDHfQG5uxY=
 before_script:
-- psql -U postgres -c "create database ${DATABASE_NAME}"
-- psql -U postgres -c "create user ${DATABASE_USERNAME} with password '${DATABASE_PASSWORD}'"
-- psql -U postgres -c "alter user ${DATABASE_USERNAME} with superuser"
+  - psql -U postgres -c "create database ${DATABASE_NAME}"
+  - psql -U postgres -c "create user ${DATABASE_USERNAME} with password '${DATABASE_PASSWORD}'"
+  - psql -U postgres -c "alter user ${DATABASE_USERNAME} with superuser"
+script:
+  - npm test
+  - npm start &
+  # due to prestart (hydrate the database)
+  - sleep 10
+  - npm run perf:test
 after_success: npm run coverage

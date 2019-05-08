@@ -10,6 +10,7 @@
     "prestart": "./node_modules/.bin/knex migrate:latest && ./node_modules/.bin/knex seed:run",
     "start": "node app.js",
     "test": "./node_modules/.bin/c8 ./node_modules/.bin/mocha ./test/**/*.test.js --exit",
+    "perf:test": "./node_modules/.bin/artillery run ./test/performance/test*.yml",
     "coverage": "./node_modules/.bin/c8 report  --reporter=text-lcov | ./node_modules/.bin/coveralls",
     "hydrate": "./node_modules/.bin/knex migrate:latest --env development && ./node_modules/.bin/knex seed:run --env development",
     "debug": "node --inspect=0.0.0.0 app.js",
@@ -36,6 +37,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "artillery": "^1.6.0-28",
     "c8": "^3.5.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",

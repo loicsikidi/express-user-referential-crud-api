@@ -1,0 +1,12 @@
+config:
+  target: 'http://localhost:8080/api/v1'
+  ensure:
+    p95: 800
+    maxErrorRate: 1
+  phases:
+    - duration: 1
+      arrivalRate: 100
+scenarios:
+  - flow:
+    - get:
+        url: "/users"
