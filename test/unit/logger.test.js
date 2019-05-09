@@ -25,9 +25,11 @@ describe('logger module unit tests', () => {
         });
 
         it('expect to have get_user action', (done) => {
-            const req = { originalUrl: '/api/v1/users/john.doe@suricats-consulting.com', method: 'GET' };
-            const action = logger.getAction(req);
-            expect(action).to.be.equal('get_user');
+            const validBasePaths = ['/api/v1/users/john.doe@suricats-consulting.com', '/api/v1/users/john.doe@suricats-consulting.com/'];
+            Object.keys(validBasePaths).forEach(index => {
+                const req = { originalUrl: validBasePaths[index], method: 'GET' };
+                expect(logger.getAction(req)).to.be.equal('get_user');
+            });
             done();
         });
 
@@ -47,16 +49,20 @@ describe('logger module unit tests', () => {
         });
 
         it('expect to have put_user action', (done) => {
-            const req = { originalUrl: '/api/v1/users/john.doe@suricats-consulting.com', method: 'PUT' };
-            const action = logger.getAction(req);
-            expect(action).to.be.equal('put_user');
+            const validBasePaths = ['/api/v1/users/john.doe@suricats-consulting.com', '/api/v1/users/john.doe@suricats-consulting.com/'];
+            Object.keys(validBasePaths).forEach(index => {
+                const req = { originalUrl: validBasePaths[index], method: 'PUT' };
+                expect(logger.getAction(req)).to.be.equal('put_user');
+            });
             done();
         });
 
         it('expect to have delete_user action', (done) => {
-            const req = { originalUrl: '/api/v1/users/john.doe@suricats-consulting.com', method: 'DELETE' };
-            const action = logger.getAction(req);
-            expect(action).to.be.equal('delete_user');
+            const validBasePaths = ['/api/v1/users/john.doe@suricats-consulting.com', '/api/v1/users/john.doe@suricats-consulting.com/'];
+            Object.keys(validBasePaths).forEach(index => {
+                const req = { originalUrl: validBasePaths[index], method: 'DELETE' };
+                expect(logger.getAction(req)).to.be.equal('delete_user');
+            });
             done();
         });
 

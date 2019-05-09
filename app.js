@@ -61,13 +61,13 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  req.logger.error({err, err}, 'error catched in error middleware');
+  req.logger.error({err: err}, 'error catched in error middleware');
   err = getCleanErr(err);
   // handle the exception throws by express-openapi-validate module 
   if(err.statusCode == 400){
     err.name = "bad_request";
   }
-  response = {
+  let response = {
     code: err.name,
     message: err.message
   }
