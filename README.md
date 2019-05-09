@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/LoicSikidi/express-user-referential-crud-api.svg?branch=master)](https://travis-ci.org/LoicSikidi/express-user-referential-crud-api)
 [![Coverage Status](https://coveralls.io/repos/github/LoicSikidi/express-user-referential-crud-api/badge.svg)](https://coveralls.io/github/LoicSikidi/express-user-referential-crud-api)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=express-user-referential-crud-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=express-user-referential-crud-api)
 
 # User Referential CRUD Api
 
