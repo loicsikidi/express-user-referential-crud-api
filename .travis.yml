@@ -9,6 +9,8 @@ cache:
 notifications:
   email:
     on_failure: always
+services:
+  - docker
 addons:
   postgresql: '9.5'
   sonarcloud:
