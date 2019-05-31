@@ -2,13 +2,15 @@ dist: xenial
 language: node_js
 node_js:
   - 10.15.3
+notifications:
+  email:
+    recipients:
+      - loic.sikidi@gmail.com
+    on_success: never
 cache: 
   npm: true
   directories:
     - '$HOME/.sonar/cache'
-notifications:
-  email:
-    on_failure: always
 services:
   - docker
 addons:
@@ -29,13 +31,23 @@ before_script:
   - psql -U postgres -c "create database ${DATABASE_NAME}"
   - psql -U postgres -c "create user ${DATABASE_USERNAME} with password '${DATABASE_PASSWORD}'"
   - psql -U postgres -c "alter user ${DATABASE_USERNAME} with superuser"
-script:
-  - npm test
-  - npm start &
-  # due to prestart (hydrate the database)
-  - sleep 10
-  - npm run perf:test
-  - sonar-scanner
+
+jobs:
+  include:
+    - stage: security audit
+      script:
+        - npm audit
+    - stage: tests
+      name: "Unit Tests"
+      script:
+        - npm test
+        - sonar-scanner
+    - script:
+        - npm start &
+        # due to prestart (hydrate the database)
+        - sleep 10
+        - npm run perf:test
+      name: "Integration Tests"
 after_success: npm run coverage
 deploy:
   provider: script
