@@ -12,8 +12,12 @@ test
 .travis.yml
 .env
 .gitignore
+.gcloudignore
 .dockerignore
 Dockerfile
 TODO
 README.md
+Vagrantfile
+app.yaml
+sonar-project.properties
 *.log
