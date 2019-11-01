@@ -4,7 +4,7 @@
   "description": "suricats homemade API",
   "main": "app.js",
   "engines": {
-    "node": "10.15.3"
+    "node": "10.17.0"
   },
   "scripts": {
     "prestart": "./node_modules/.bin/knex migrate:latest && ./node_modules/.bin/knex seed:run",
