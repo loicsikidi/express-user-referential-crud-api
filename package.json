@@ -38,12 +38,12 @@
   },
   "devDependencies": {
     "artillery": "^1.6.0-28",
-    "c8": "^5.0.1",
+    "c8": "^7.5.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "coveralls": "^3.0.3",
     "faker": "^4.1.0",
-    "mocha": "^6.1.4"
+    "mocha": "^8.3.0"
   },
   "mocha": {
     "timeout": 10000
