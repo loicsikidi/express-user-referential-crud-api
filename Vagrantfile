@@ -9,13 +9,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = true
 
   config.vm.provider :virtualbox do |v|
-     v.name = "suricats-api"
+     v.name = "user-referential-api"
      v.memory = 2048
      v.linked_clone = true
   end
 
-  config.vm.define :suricatsapi do |app|
-     app.vm.hostname = "suricats-api.local.com"
+  config.vm.define :userrefentialapi do |app|
+     app.vm.hostname = "user-referential-api.local.com"
      app.vm.network :private_network, ip: "192.168.60.8"
      app.vm.network "forwarded_port", guest: 8080, host: 9080
      app.vm.network "forwarded_port", guest: 9229, host: 9229

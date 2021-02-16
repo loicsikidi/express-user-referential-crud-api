@@ -79,41 +79,23 @@ In order to facilitate the installation of this project on our local machine. Th
 2. Run this command to provision the VM
 
 ```cmd
+ansible-galaxy install -r ./provisioning/requirements.yml
 vagrant up
 ```
 
 The operation can take some time depending on our internet speed.
 
-3. Connect to the machine
+3. Add the hostanem
 
 ```cmd
-vagrant ssh
+# add this line to /etc/hosts
+192.168.60.8 user-referential-api.local.com
 ```
 
-4. Go to the sync link between your local machine & the VM
+4. Testing the API
 
 ```cmd
-cd /srv/server 
-```
-
-5. Hydrate the database with test values
-
-```cmd
-npm run hydrate
-```
-
-6. Run the project
-
-Remark : the server will listen the port 9080 on your host machine (cf. vagrantfile line: 21).
-
-```cmd
-npm run
-```
-
-OR
-
-```cmd
-npm run watch:server #usefull if you need to dev
+curl -sS http://user-referential-api.local.com:8080/api/v1/users | jq .
 ```
 
 Project run in this context:

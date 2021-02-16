@@ -1,7 +1,7 @@
 {
-  "name": "suricats-api",
+  "name": "user-referential-api",
   "version": "1.0.0",
-  "description": "suricats homemade API",
+  "description": "users crud API",
   "main": "app.js",
   "engines": {
     "node": "10.15.3"

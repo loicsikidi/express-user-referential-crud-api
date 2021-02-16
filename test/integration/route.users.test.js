@@ -11,7 +11,7 @@ const validator = u.openApiValidator();
 const server = require('../../app');
 
 const resource = 'users';
-const nominalUsername = 'john.doe@suricats-consulting.com';
+const nominalUsername = 'john.doe@kiwi-corporation.com';
 const nominalFirstName = 'john';
 const nominalLastName = 'doe';
 
@@ -52,7 +52,7 @@ describe('USERS API routes', function() {
             expect(res.body.users[0].username).to.equal(nominalUsername);
             expect(res.body.users[0].first_name).to.equal(nominalFirstName);
             expect(res.body.users[0].last_name).to.equal(nominalLastName);
-            expect(res.body.users[1].username).to.equal('jane.doe@suricats-consulting.com');
+            expect(res.body.users[1].username).to.equal('jane.doe@kiwi-corporation.com');
             expect(res.body.users[1].first_name).to.equal('jane');
             expect(res.body.users[1].last_name).to.equal('doe');
             done();
@@ -90,7 +90,7 @@ describe('USERS API routes', function() {
               expect(res.body.limit).to.equal(5);
               expect(res.body.offset).to.equal(1);
               expect(res.body.users.length).to.equal(1);
-              expect(res.body.users[0].username).to.equal('jane.doe@suricats-consulting.com');
+              expect(res.body.users[0].username).to.equal('jane.doe@kiwi-corporation.com');
               expect(res.body.users[0].first_name).to.equal('jane');
               expect(res.body.users[0].last_name).to.equal('doe');
               done();
@@ -145,7 +145,7 @@ describe('USERS API routes', function() {
         it('expect to have not_found (404) error', function(done) {
             const validateResponse = validator.validateResponse("get", "/users/{username}");
             chai.request(server)
-            .get(`/api/v1/${resource}/not.found@suricats-consulting.com`)
+            .get(`/api/v1/${resource}/not.found@kiwi-corporation.com`)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
               expect(res).to.have.status(404);
@@ -160,7 +160,7 @@ describe('USERS API routes', function() {
         it('expect to post succefully a new user', function(done) {
           const validateResponse = validator.validateResponse("post", "/users");
           const newUser = {
-            username: 'new.user@suricats-consulting.com',
+            username: 'new.user@kiwi-corporation.com',
             first_name: 'new',
             last_name: 'user',
             status: ref.STATUS_INTERN_CODE
@@ -179,7 +179,7 @@ describe('USERS API routes', function() {
         it('expect to have a conflict (409) error', function(done) {
             const validateResponse = validator.validateResponse("post", "/users");
             const newUser = {
-              username: 'new.user@suricats-consulting.com',
+              username: 'new.user@kiwi-corporation.com',
               first_name: 'new',
               last_name: 'user',
               status: ref.STATUS_INTERN_CODE
@@ -208,7 +208,7 @@ describe('USERS API routes', function() {
         it('expect to have a bad_request (400) error', function(done) {
             const validateResponse = validator.validateResponse("post", "/users");
             const newUser = {
-              username: 'new.user@suricats-consulting.com',
+              username: 'new.user@kiwi-corporation.com',
               first_name: 'new',
               last_name: 'user',
               status: 'WRONG_STATUS'
@@ -262,7 +262,7 @@ describe('USERS API routes', function() {
                 phone: '0691923042'
             };
             chai.request(server)
-            .put(`/api/v1/${resource}/not.found@suricats-consulting.com`)
+            .put(`/api/v1/${resource}/not.found@kiwi-corporation.com`)
             .send(updateUser)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;
@@ -311,7 +311,7 @@ describe('USERS API routes', function() {
         it('expect to have not_found (404) error', function(done) {
             const validateResponse = validator.validateResponse("delete", "/users/{username}");
             chai.request(server)
-            .delete(`/api/v1/${resource}/not.found@suricats-consulting.com`)
+            .delete(`/api/v1/${resource}/not.found@kiwi-corporation.com`)
             .end(function(err, res) {
               expect(validateResponse(res)).to.be.undefined;  
               expect(res).to.have.status(404);

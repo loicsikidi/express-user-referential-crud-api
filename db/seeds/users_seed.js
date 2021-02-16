@@ -22,7 +22,7 @@ exports.seed = (knex, Promise) => {
   })
   .then((statusesId) => {
     statusesResponse = statusesId;
-    let username = 'john.doe@suricats-consulting.com';
+    let username = 'john.doe@kiwi-corporation.com';
     let first_name = 'john';
     let last_name = 'doe';
     return Promise.join(
@@ -36,7 +36,7 @@ exports.seed = (knex, Promise) => {
     )
   })
   .then(() => {
-    let username = 'jane.doe@suricats-consulting.com';
+    let username = 'jane.doe@kiwi-corporation.com';
     let first_name = 'jane';
     let last_name = 'doe';
     return Promise.join(

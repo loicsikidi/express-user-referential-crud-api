@@ -25,7 +25,7 @@ describe('logger module unit tests', () => {
         });
 
         it('expect to have get_user action', (done) => {
-            const validBasePaths = ['/api/v1/users/john.doe@suricats-consulting.com', '/api/v1/users/john.doe@suricats-consulting.com/'];
+            const validBasePaths = ['/api/v1/users/john.doe@kiwi-corporation.com', '/api/v1/users/john.doe@kiwi-corporation.com/'];
             Object.keys(validBasePaths).forEach(index => {
                 const req = { originalUrl: validBasePaths[index], method: 'GET' };
                 expect(logger.getAction(req)).to.be.equal('get_user');
@@ -43,13 +43,13 @@ describe('logger module unit tests', () => {
         });
 
         it('expect to have an undefined action (post_users don\'t expect to have {username} in its endpoint)', (done) => {
-            const req = { originalUrl: '/api/v1/users/john.doe@suricats-consulting.com', method: 'POST' };
+            const req = { originalUrl: '/api/v1/users/john.doe@kiwi-corporation.com', method: 'POST' };
             expect(logger.getAction(req)).to.be.undefined;
             done();
         });
 
         it('expect to have put_user action', (done) => {
-            const validBasePaths = ['/api/v1/users/john.doe@suricats-consulting.com', '/api/v1/users/john.doe@suricats-consulting.com/'];
+            const validBasePaths = ['/api/v1/users/john.doe@kiwi-corporation.com', '/api/v1/users/john.doe@kiwi-corporation.com/'];
             Object.keys(validBasePaths).forEach(index => {
                 const req = { originalUrl: validBasePaths[index], method: 'PUT' };
                 expect(logger.getAction(req)).to.be.equal('put_user');
@@ -58,7 +58,7 @@ describe('logger module unit tests', () => {
         });
 
         it('expect to have delete_user action', (done) => {
-            const validBasePaths = ['/api/v1/users/john.doe@suricats-consulting.com', '/api/v1/users/john.doe@suricats-consulting.com/'];
+            const validBasePaths = ['/api/v1/users/john.doe@kiwi-corporation.com', '/api/v1/users/john.doe@kiwi-corporation.com/'];
             Object.keys(validBasePaths).forEach(index => {
                 const req = { originalUrl: validBasePaths[index], method: 'DELETE' };
                 expect(logger.getAction(req)).to.be.equal('delete_user');
@@ -82,7 +82,7 @@ describe('logger module unit tests', () => {
         it('expect to have an undefined action (the {username} doesn\'t respect mail format)', (done) => {
             const arrMethods = ['GET', 'POST', 'PUT', 'DELETE'];
             Object.keys(arrMethods).forEach(index => {
-                const req = { originalUrl: '/api/v1/users/john.doe+suricats-consulting.com', method: arrMethods[index] };
+                const req = { originalUrl: '/api/v1/users/john.doe+kiwi-corporation.com', method: arrMethods[index] };
                 expect(logger.getAction(req)).to.be.undefined;
             });
             done();

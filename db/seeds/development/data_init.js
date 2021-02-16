@@ -13,7 +13,7 @@ exports.seed = async (knex, Promise) => {
     ];
     await knex("statuses").insert(statuses);
     const statusesResponse = await knex('statuses').pluck('id');
-    let username = 'john.doe@suricats-consulting.com';
+    let username = 'john.doe@kiwi-corporation.com';
     let first_name = 'john';
     let last_name = 'doe';
     await knex('users').insert({
@@ -23,7 +23,7 @@ exports.seed = async (knex, Promise) => {
         last_name: last_name,
         status_id: faker.random.arrayElement(statusesResponse)
     });
-    username = 'jane.doe@suricats-consulting.com';
+    username = 'jane.doe@kiwi-corporation.com';
     first_name = 'jane';
     await knex('users').insert({
       id: u.emailToUuid(username),
