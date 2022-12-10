@@ -25,7 +25,7 @@
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.12",
     "dotenv": "^8.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-openapi-defaults": "^0.5.1",
     "express-openapi-validate": "^0.4.4",
     "express-request-id": "^1.4.1",
